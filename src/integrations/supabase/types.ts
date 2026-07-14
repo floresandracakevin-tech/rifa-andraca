@@ -78,6 +78,7 @@ export type Database = {
       }
     }
     Functions: {
+      claim_first_admin: { Args: never; Returns: boolean }
       confirm_tickets: { Args: { _numbers: number[] }; Returns: number }
       has_role: {
         Args: {
