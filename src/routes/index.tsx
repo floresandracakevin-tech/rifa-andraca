@@ -133,7 +133,7 @@ function RafflePage() {
   const selectedList = useMemo(() => Array.from(selected).sort((a, b) => a - b), [selected]);
   const takenCount = takenSet.size;
 
-  const gallery = [truck2.url, truck3.url, truck4.url, truck5.url];
+  const gallery = [truck, truck2.url, truck4.url, truck5.url];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
