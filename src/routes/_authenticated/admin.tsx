@@ -14,6 +14,7 @@ type Ticket = {
   status: "available" | "reserved" | "confirmed";
   buyer_name: string | null;
   buyer_phone: string | null;
+  buyer_state: string | null;
   reserved_at: string | null;
   confirmed_at: string | null;
 };
