@@ -174,7 +174,7 @@ function RafflePage() {
             </div>
           </div>
           <div className="relative">
-            <img src={truck} alt="Chevrolet S10 MAX 2024 blanca" width={1600} height={1008} className="rounded-2xl border-4 border-ink shadow-2xl" />
+            <img src={truck3.url} alt="Chevrolet S10 MAX 2024 blanca en perspectiva" width={1600} height={1008} className="rounded-2xl border-4 border-ink shadow-2xl w-full object-cover" />
           </div>
         </div>
       </section>
