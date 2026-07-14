@@ -97,16 +97,26 @@ function AdminPage() {
     return <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Cargando...</div>;
   }
 
+  const claimAdmin = async () => {
+    const { data, error } = await supabase.rpc("claim_first_admin");
+    if (error) { alert(error.message); return; }
+    if (data === true) window.location.reload();
+    else alert("Ya existe un administrador. Contacta al organizador.");
+  };
+
   if (isAdmin === false) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="max-w-md text-center">
+        <div className="max-w-md text-center space-y-4">
+          <img src={logo} alt="" width={80} height={80} className="h-20 w-20 mx-auto" />
           <h1 className="font-display text-3xl text-primary">Acceso restringido</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Tu cuenta <strong>{userEmail}</strong> no tiene rol de administrador.
-            <br />Contacta al desarrollador para que te asigne el rol.
+          <p className="text-sm text-muted-foreground">
+            Sesión: <strong>{userEmail}</strong>. Si eres el organizador y aún no hay administrador, reclama el acceso ahora.
           </p>
-          <button onClick={signOut} className="mt-6 rounded-md border border-border px-4 py-2 text-sm">Cerrar sesión</button>
+          <button onClick={claimAdmin} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+            Reclamar acceso de administrador
+          </button>
+          <div><button onClick={signOut} className="mt-2 rounded-md border border-border px-4 py-2 text-sm">Cerrar sesión</button></div>
         </div>
       </div>
     );
