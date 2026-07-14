@@ -152,13 +152,6 @@ function RafflePage() {
         </div>
       </header>
 
-      {/* IMPORTANT NOTICE */}
-      <div className="bg-destructive text-destructive-foreground">
-        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm md:text-base font-semibold">
-          ⚠️ NOTA IMPORTANTE: Tienes <span className="underline">20 MINUTOS</span> después de apartar tu boleto para enviar el comprobante de pago por WhatsApp. Si no envías comprobante en ese tiempo, tu apartado se libera automáticamente y <span className="underline">NO se tomará en cuenta</span>.
-        </div>
-      </div>
-
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-2 md:items-center">
           <div>
