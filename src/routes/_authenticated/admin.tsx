@@ -202,6 +202,7 @@ function AdminPage() {
                       {" · "}
                       <a href={`https://wa.me/${g.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="underline">WhatsApp</a>
                     </p>
+                    {g.state && <p className="text-xs text-muted-foreground mt-0.5">📍 {g.state}</p>}
                     <p className="text-xs text-muted-foreground mt-1">
                       {g.tickets.length} boleto(s) · ${(g.tickets.length * 50).toLocaleString()} MXN
                     </p>
