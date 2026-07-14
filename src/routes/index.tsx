@@ -133,7 +133,7 @@ function RafflePage() {
   const selectedList = useMemo(() => Array.from(selected).sort((a, b) => a - b), [selected]);
   const takenCount = takenSet.size;
 
-  const gallery = [truck2.url, truck3.url, truck4.url, truck5.url];
+  const gallery = [truck, truck2.url, truck4.url, truck5.url];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -151,13 +151,6 @@ function RafflePage() {
           </Link>
         </div>
       </header>
-
-      {/* IMPORTANT NOTICE */}
-      <div className="bg-destructive text-destructive-foreground">
-        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm md:text-base font-semibold">
-          ⚠️ NOTA IMPORTANTE: Tienes <span className="underline">20 MINUTOS</span> después de apartar tu boleto para enviar el comprobante de pago por WhatsApp. Si no envías comprobante en ese tiempo, tu apartado se libera automáticamente y <span className="underline">NO se tomará en cuenta</span>.
-        </div>
-      </div>
 
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-2 md:items-center">
@@ -181,7 +174,7 @@ function RafflePage() {
             </div>
           </div>
           <div className="relative">
-            <img src={truck} alt="Chevrolet S10 MAX 2024 blanca" width={1600} height={1008} className="rounded-2xl border-4 border-ink shadow-2xl" />
+            <img src={truck3.url} alt="Chevrolet S10 MAX 2024 blanca en perspectiva" width={1600} height={1008} className="rounded-2xl border-4 border-ink shadow-2xl w-full object-cover" />
           </div>
         </div>
       </section>
@@ -278,9 +271,12 @@ function RafflePage() {
                 ))}
               </div>
             )}
-            <p className="mt-4 text-sm">
-              Total: <strong>{selectedList.length}</strong> boleto(s) · <strong>${(selectedList.length * 50).toLocaleString()} MXN</strong>
-            </p>
+            <div className="mt-4 rounded-lg border-2 border-primary bg-primary/5 p-4 space-y-1 text-sm">
+              <p>Boletos seleccionados: <strong>{selectedList.length}</strong></p>
+              <p>Boletos de regalo (3 por cada uno): <strong className="text-primary">+{selectedList.length * 3}</strong></p>
+              <p>Total de oportunidades: <strong>{selectedList.length * 4}</strong></p>
+              <p className="text-lg pt-1 border-t border-primary/20 mt-2">A pagar: <strong className="text-primary text-2xl font-display">${(selectedList.length * 50).toLocaleString()} MXN</strong></p>
+            </div>
             <div className="mt-4 rounded-lg border-2 border-destructive bg-destructive/10 p-3 text-sm">
               <strong className="text-destructive">⏱ Importante:</strong> Después de apartar tienes <strong>20 minutos</strong> para enviar tu comprobante de pago. Si no lo envías, tus boletos se liberan automáticamente y no se tomará en cuenta la compra.
             </div>
