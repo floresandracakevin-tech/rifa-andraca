@@ -63,13 +63,23 @@ function AdminPage() {
     return () => { supabase.removeChannel(channel); };
   }, [isAdmin]);
 
-  // Group by buyer_name + phone
+  // Group by buyer_name + phone with search
   const groups = useMemo(() => {
-    const filtered = tickets.filter((t) => filter === "all" ? true : t.status === filter);
-    const map = new Map<string, { name: string; phone: string; tickets: Ticket[] }>();
+    const q = search.trim().toLowerCase();
+    const qNum = parseInt(q.replace(/^0+/, ""), 10);
+    const filtered = tickets.filter((t) => {
+      if (filter !== "all" && t.status !== filter) return false;
+      if (!q) return true;
+      const nameMatch = (t.buyer_name ?? "").toLowerCase().includes(q);
+      const phoneMatch = (t.buyer_phone ?? "").toLowerCase().includes(q);
+      const stateMatch = (t.buyer_state ?? "").toLowerCase().includes(q);
+      const numMatch = Number.isFinite(qNum) && t.number === qNum;
+      return nameMatch || phoneMatch || stateMatch || numMatch;
+    });
+    const map = new Map<string, { name: string; phone: string; state: string; tickets: Ticket[] }>();
     for (const t of filtered) {
       const key = `${t.buyer_name}||${t.buyer_phone}`;
-      const entry = map.get(key) ?? { name: t.buyer_name ?? "", phone: t.buyer_phone ?? "", tickets: [] };
+      const entry = map.get(key) ?? { name: t.buyer_name ?? "", phone: t.buyer_phone ?? "", state: t.buyer_state ?? "", tickets: [] };
       entry.tickets.push(t);
       map.set(key, entry);
     }
@@ -77,7 +87,7 @@ function AdminPage() {
       ...g,
       tickets: g.tickets.sort((a, b) => a.number - b.number),
     })).sort((a, b) => b.tickets.length - a.tickets.length);
-  }, [tickets, filter]);
+  }, [tickets, filter, search]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
