@@ -14,16 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      tickets: {
+        Row: {
+          buyer_name: string | null
+          buyer_phone: string | null
+          confirmed_at: string | null
+          number: number
+          reserved_at: string | null
+          status: string
+        }
+        Insert: {
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          confirmed_at?: string | null
+          number: number
+          reserved_at?: string | null
+          status?: string
+        }
+        Update: {
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          confirmed_at?: string | null
+          number?: number
+          reserved_at?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      tickets_public: {
+        Row: {
+          number: number | null
+          status: string | null
+        }
+        Insert: {
+          number?: number | null
+          status?: string | null
+        }
+        Update: {
+          number?: number | null
+          status?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      confirm_tickets: { Args: { _numbers: number[] }; Returns: number }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      release_tickets: { Args: { _numbers: number[] }; Returns: number }
+      reserve_tickets: {
+        Args: { _name: string; _numbers: number[]; _phone: string }
+        Returns: {
+          reserved: number[]
+          unavailable: number[]
+        }[]
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +223,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
