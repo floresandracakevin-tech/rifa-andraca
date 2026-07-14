@@ -168,13 +168,22 @@ function AdminPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 text-sm">
+        <div className="flex flex-wrap gap-2 text-sm items-center">
           {(["all", "reserved", "confirmed"] as const).map((f) => (
             <button key={f} onClick={() => setFilter(f)}
               className={`rounded-md border px-3 py-1.5 ${filter === f ? "bg-primary text-primary-foreground border-primary" : "border-border"}`}>
               {f === "all" ? "Todos" : f === "reserved" ? "Por pagar" : "Pagados"}
             </button>
           ))}
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por número, nombre, teléfono o estado…"
+            className="flex-1 min-w-[220px] rounded-md border border-input bg-card px-3 py-1.5 text-sm"
+          />
+          {search && (
+            <button onClick={() => setSearch("")} className="rounded-md border border-border px-3 py-1.5 text-xs">Limpiar</button>
+          )}
         </div>
 
         <div className="space-y-3">
