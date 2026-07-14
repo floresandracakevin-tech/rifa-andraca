@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           buyer_name: string | null
           buyer_phone: string | null
+          buyer_state: string | null
           confirmed_at: string | null
           number: number
           reserved_at: string | null
@@ -26,6 +27,7 @@ export type Database = {
         Insert: {
           buyer_name?: string | null
           buyer_phone?: string | null
+          buyer_state?: string | null
           confirmed_at?: string | null
           number: number
           reserved_at?: string | null
@@ -34,6 +36,7 @@ export type Database = {
         Update: {
           buyer_name?: string | null
           buyer_phone?: string | null
+          buyer_state?: string | null
           confirmed_at?: string | null
           number?: number
           reserved_at?: string | null
@@ -80,6 +83,7 @@ export type Database = {
     Functions: {
       claim_first_admin: { Args: never; Returns: boolean }
       confirm_tickets: { Args: { _numbers: number[] }; Returns: number }
+      expire_reservations: { Args: never; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -89,7 +93,12 @@ export type Database = {
       }
       release_tickets: { Args: { _numbers: number[] }; Returns: number }
       reserve_tickets: {
-        Args: { _name: string; _numbers: number[]; _phone: string }
+        Args: {
+          _name: string
+          _numbers: number[]
+          _phone: string
+          _state: string
+        }
         Returns: {
           reserved: number[]
           unavailable: number[]

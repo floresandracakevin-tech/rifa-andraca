@@ -4,13 +4,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { padTicket } from "@/lib/format";
 import logo from "@/assets/logo.png";
 import truck from "@/assets/truck.jpg";
+import truck2 from "@/assets/rifa_s10_2.png.asset.json";
+import truck3 from "@/assets/s10_mas_rifa_4.png.asset.json";
+import truck4 from "@/assets/s10_max_rifa_6.jpeg.asset.json";
+import truck5 from "@/assets/rifa_s10_max_rifa_7.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
   component: RafflePage,
   head: () => ({
     meta: [
       { title: "Rifa Andraca — Chevrolet S10 MAX 2024 Seminueva" },
-      { name: "description", content: "Aparta tus boletos para la Rifa Andraca. Sorteo el 25 de agosto de 2026, Lotería Nacional. Compra 1 y llévate 4 oportunidades por $50, o 10 boletos por $500 con 40 oportunidades." },
+      { name: "description", content: "Aparta tus boletos para la Rifa Andraca. Sorteo el 25 de agosto de 2026, Lotería Nacional. $50 el boleto con 4 oportunidades o 10 boletos por $500 con 40 oportunidades." },
     ],
   }),
 });
@@ -18,20 +22,26 @@ export const Route = createFileRoute("/")({
 const TOTAL = 60000;
 const PAGE_SIZE = 500;
 
+const ESTADOS_MX = [
+  "Aguascalientes","Baja California","Baja California Sur","Campeche","Chiapas","Chihuahua","Ciudad de México","Coahuila","Colima","Durango","Estado de México","Guanajuato","Guerrero","Hidalgo","Jalisco","Michoacán","Morelos","Nayarit","Nuevo León","Oaxaca","Puebla","Querétaro","Quintana Roo","San Luis Potosí","Sinaloa","Sonora","Tabasco","Tamaulipas","Tlaxcala","Veracruz","Yucatán","Zacatecas",
+];
+
 function RafflePage() {
   const [takenSet, setTakenSet] = useState<Set<number>>(new Set());
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [page, setPage] = useState(0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [estado, setEstado] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   const [jump, setJump] = useState("");
 
-  // Initial load: only fetch reserved/confirmed (small set)
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      // Trigger cleanup of expired reservations
+      await supabase.rpc("expire_reservations");
       const { data, error } = await supabase
         .from("tickets_public")
         .select("number,status")
@@ -39,10 +49,11 @@ function RafflePage() {
       if (cancelled || error) return;
       setTakenSet(new Set((data ?? []).map((t: any) => t.number)));
     })();
-    return () => { cancelled = true; };
+    // Periodic cleanup while page is open
+    const iv = setInterval(() => { supabase.rpc("expire_reservations"); }, 60_000);
+    return () => { cancelled = true; clearInterval(iv); };
   }, []);
 
-  // Realtime updates
   useEffect(() => {
     const channel = supabase
       .channel("tickets-live")
@@ -96,10 +107,11 @@ function RafflePage() {
     if (selected.size === 0) { setMessage({ type: "err", text: "Selecciona al menos un boleto." }); return; }
     if (name.trim().length < 2) { setMessage({ type: "err", text: "Escribe tu nombre completo." }); return; }
     if (phone.trim().length < 8) { setMessage({ type: "err", text: "Escribe un teléfono válido." }); return; }
+    if (!estado) { setMessage({ type: "err", text: "Selecciona tu estado." }); return; }
     setLoading(true);
     const nums = Array.from(selected).sort((a, b) => a - b);
     const { data, error } = await supabase.rpc("reserve_tickets", {
-      _name: name.trim(), _phone: phone.trim(), _numbers: nums,
+      _name: name.trim(), _phone: phone.trim(), _state: estado, _numbers: nums,
     });
     setLoading(false);
     if (error) { setMessage({ type: "err", text: error.message || "No se pudo apartar." }); return; }
@@ -114,18 +126,17 @@ function RafflePage() {
     setSelected(new Set());
     setMessage({
       type: "ok",
-      text: unavailable.length
-        ? `Apartamos ${reserved.length} boleto(s). No pudimos apartar: ${unavailable.map(padTicket).join(", ")}. Realiza tu transferencia para confirmar.`
-        : `¡Listo! Apartamos ${reserved.length} boleto(s). Realiza tu transferencia para confirmar tu participación.`,
+      text: `¡Listo! Apartamos ${reserved.length} boleto(s). Tienes 20 minutos para enviar tu comprobante de pago o los boletos se liberarán automáticamente.${unavailable.length ? ` No pudimos apartar: ${unavailable.map(padTicket).join(", ")}.` : ""}`,
     });
   };
 
   const selectedList = useMemo(() => Array.from(selected).sort((a, b) => a - b), [selected]);
   const takenCount = takenSet.size;
 
+  const gallery = [truck2.url, truck3.url, truck4.url, truck5.url];
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
       <header className="border-b border-border bg-cream">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
@@ -141,20 +152,26 @@ function RafflePage() {
         </div>
       </header>
 
-      {/* Hero */}
+      {/* IMPORTANT NOTICE */}
+      <div className="bg-destructive text-destructive-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm md:text-base font-semibold">
+          ⚠️ NOTA IMPORTANTE: Tienes <span className="underline">20 MINUTOS</span> después de apartar tu boleto para enviar el comprobante de pago por WhatsApp. Si no envías comprobante en ese tiempo, tu apartado se libera automáticamente y <span className="underline">NO se tomará en cuenta</span>.
+        </div>
+      </div>
+
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-2 md:items-center">
           <div>
             <p className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-semibold uppercase tracking-widest text-secondary-foreground">Chevrolet S10 MAX 2024 · Seminueva · Blanca</p>
             <h2 className="mt-4 text-5xl md:text-6xl font-display leading-[0.95] text-primary">GÁNATE LA TROCA</h2>
             <p className="mt-4 max-w-md text-base text-muted-foreground">
-              Boletos del <span className="font-mono font-semibold text-foreground">00001</span> al <span className="font-mono font-semibold text-foreground">60000</span>. Sorteo con base en la <strong className="text-foreground">Lotería Nacional</strong> el <strong className="text-foreground">25 de agosto de 2026</strong>.
+              Sorteo con base en la <strong className="text-foreground">Lotería Nacional</strong> el <strong className="text-foreground">25 de agosto de 2026</strong>.
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl border-2 border-primary bg-card p-4">
                 <p className="text-3xl font-display text-primary">$50</p>
-                <p className="text-sm font-semibold">1 boleto = <span className="text-primary">4 oportunidades</span></p>
-                <p className="text-xs text-muted-foreground mt-1">Te regalamos 3 números extra</p>
+                <p className="text-sm font-semibold">1 boleto + <span className="text-primary">3 de regalo</span></p>
+                <p className="text-xs text-muted-foreground mt-1">4 oportunidades para ganar</p>
               </div>
               <div className="rounded-xl border-2 border-secondary bg-secondary/20 p-4">
                 <p className="text-3xl font-display text-primary">$500</p>
@@ -169,7 +186,15 @@ function RafflePage() {
         </div>
       </section>
 
-      {/* Payment info */}
+      {/* Gallery */}
+      <section className="mx-auto max-w-6xl px-4 pb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {gallery.map((src, i) => (
+            <img key={i} src={src} alt={`Chevrolet S10 MAX foto ${i + 1}`} loading="lazy" className="aspect-[4/3] w-full object-cover rounded-xl border-2 border-ink" />
+          ))}
+        </div>
+      </section>
+
       <section className="border-y border-border bg-ink text-cream">
         <div className="mx-auto max-w-6xl px-4 py-6 grid gap-4 md:grid-cols-3">
           <div>
@@ -185,14 +210,13 @@ function RafflePage() {
             <p className="text-xs uppercase tracking-widest text-secondary">Pasos</p>
             <ol className="text-sm text-cream/90 list-decimal list-inside space-y-0.5">
               <li>Selecciona tus boletos</li>
-              <li>Aparta con tu nombre y teléfono</li>
-              <li>Transfiere y envía tu comprobante</li>
+              <li>Aparta con tu nombre, teléfono y estado</li>
+              <li>Transfiere y envía tu comprobante en 20 min</li>
             </ol>
           </div>
         </div>
       </section>
 
-      {/* Ticket picker */}
       <section id="boletos" className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
@@ -213,48 +237,25 @@ function RafflePage() {
           </form>
         </div>
 
-        {/* Legend */}
         <div className="flex flex-wrap gap-4 text-xs mb-4">
           <span className="flex items-center gap-2"><span className="ticket-btn h-5 w-8" /> Disponible</span>
           <span className="flex items-center gap-2"><span className="ticket-btn ticket-selected h-5 w-8" /> Seleccionado</span>
           <span className="flex items-center gap-2"><span className="ticket-btn ticket-taken h-5 w-8" /> Apartado</span>
         </div>
 
-        {/* Pagination */}
         <div className="flex items-center justify-between mb-3 text-sm">
-          <button
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-            className="rounded-md border border-border px-3 py-1.5 disabled:opacity-40"
-          >← Anterior</button>
-          <span className="font-mono">
-            {padTicket(pageStart)} – {padTicket(pageEnd)} · página {page + 1} de {totalPages}
-          </span>
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            disabled={page >= totalPages - 1}
-            className="rounded-md border border-border px-3 py-1.5 disabled:opacity-40"
-          >Siguiente →</button>
+          <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} className="rounded-md border border-border px-3 py-1.5 disabled:opacity-40">← Anterior</button>
+          <span className="font-mono">{padTicket(pageStart)} – {padTicket(pageEnd)} · página {page + 1} de {totalPages}</span>
+          <button onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="rounded-md border border-border px-3 py-1.5 disabled:opacity-40">Siguiente →</button>
         </div>
 
-        {/* Grid */}
         <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1.5">
           {cells.map((n) => {
             const taken = takenSet.has(n);
             const sel = selected.has(n);
-            const cls = taken
-              ? "ticket-btn ticket-taken"
-              : sel
-                ? "ticket-btn ticket-selected"
-                : "ticket-btn ticket-available";
+            const cls = taken ? "ticket-btn ticket-taken" : sel ? "ticket-btn ticket-selected" : "ticket-btn ticket-available";
             return (
-              <button
-                key={n}
-                onClick={() => toggle(n)}
-                disabled={taken}
-                className={cls}
-                aria-label={`Boleto ${padTicket(n)}${taken ? " apartado" : ""}`}
-              >
+              <button key={n} onClick={() => toggle(n)} disabled={taken} className={cls} aria-label={`Boleto ${padTicket(n)}${taken ? " apartado" : ""}`}>
                 {padTicket(n)}
               </button>
             );
@@ -262,7 +263,6 @@ function RafflePage() {
         </div>
       </section>
 
-      {/* Reservation form */}
       <section className="border-t border-border bg-cream">
         <div className="mx-auto max-w-6xl px-4 py-10 grid gap-8 md:grid-cols-2">
           <div>
@@ -272,12 +272,7 @@ function RafflePage() {
             ) : (
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {selectedList.map((n) => (
-                  <button
-                    key={n}
-                    onClick={() => toggle(n)}
-                    className="ticket-btn ticket-selected px-2"
-                    title="Quitar"
-                  >
+                  <button key={n} onClick={() => toggle(n)} className="ticket-btn ticket-selected px-2" title="Quitar">
                     {padTicket(n)} ×
                   </button>
                 ))}
@@ -286,40 +281,36 @@ function RafflePage() {
             <p className="mt-4 text-sm">
               Total: <strong>{selectedList.length}</strong> boleto(s) · <strong>${(selectedList.length * 50).toLocaleString()} MXN</strong>
             </p>
+            <div className="mt-4 rounded-lg border-2 border-destructive bg-destructive/10 p-3 text-sm">
+              <strong className="text-destructive">⏱ Importante:</strong> Después de apartar tienes <strong>20 minutos</strong> para enviar tu comprobante de pago. Si no lo envías, tus boletos se liberan automáticamente y no se tomará en cuenta la compra.
+            </div>
           </div>
 
           <form onSubmit={submit} className="rounded-2xl border-2 border-primary bg-card p-6 space-y-3">
             <h4 className="font-display text-2xl text-primary">Aparta tus boletos</h4>
             <div>
               <label className="text-xs uppercase tracking-widest text-muted-foreground">Nombre completo</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              />
+              <input value={name} onChange={(e) => setName(e.target.value)} required className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
             </div>
             <div>
               <label className="text-xs uppercase tracking-widest text-muted-foreground">Teléfono / WhatsApp</label>
-              <input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                inputMode="tel"
-                className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              />
+              <input value={phone} onChange={(e) => setPhone(e.target.value)} required inputMode="tel" className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
             </div>
-            <button
-              disabled={loading}
-              className="w-full rounded-md bg-primary py-3 font-display text-lg tracking-wider text-primary-foreground disabled:opacity-60"
-            >
+            <div>
+              <label className="text-xs uppercase tracking-widest text-muted-foreground">Estado de la República</label>
+              <select value={estado} onChange={(e) => setEstado(e.target.value)} required className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                <option value="">Selecciona tu estado…</option>
+                {ESTADOS_MX.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <button disabled={loading} className="w-full rounded-md bg-primary py-3 font-display text-lg tracking-wider text-primary-foreground disabled:opacity-60">
               {loading ? "Apartando..." : "APARTAR MIS BOLETOS"}
             </button>
             {message && (
               <p className={`text-sm ${message.type === "ok" ? "text-primary" : "text-destructive"}`}>{message.text}</p>
             )}
             <p className="text-xs text-muted-foreground">
-              Al apartar, tus boletos quedan bloqueados hasta que el organizador confirme tu pago. Luego transfiere a la cuenta indicada.
+              Al apartar, tus boletos quedan bloqueados por 20 minutos. Envía tu comprobante por WhatsApp para confirmar tu participación.
             </p>
           </form>
         </div>

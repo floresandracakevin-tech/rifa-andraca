@@ -14,6 +14,7 @@ type Ticket = {
   status: "available" | "reserved" | "confirmed";
   buyer_name: string | null;
   buyer_phone: string | null;
+  buyer_state: string | null;
   reserved_at: string | null;
   confirmed_at: string | null;
 };
@@ -25,6 +26,7 @@ function AdminPage() {
   const [userEmail, setUserEmail] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "reserved" | "confirmed">("all");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -61,13 +63,23 @@ function AdminPage() {
     return () => { supabase.removeChannel(channel); };
   }, [isAdmin]);
 
-  // Group by buyer_name + phone
+  // Group by buyer_name + phone with search
   const groups = useMemo(() => {
-    const filtered = tickets.filter((t) => filter === "all" ? true : t.status === filter);
-    const map = new Map<string, { name: string; phone: string; tickets: Ticket[] }>();
+    const q = search.trim().toLowerCase();
+    const qNum = parseInt(q.replace(/^0+/, ""), 10);
+    const filtered = tickets.filter((t) => {
+      if (filter !== "all" && t.status !== filter) return false;
+      if (!q) return true;
+      const nameMatch = (t.buyer_name ?? "").toLowerCase().includes(q);
+      const phoneMatch = (t.buyer_phone ?? "").toLowerCase().includes(q);
+      const stateMatch = (t.buyer_state ?? "").toLowerCase().includes(q);
+      const numMatch = Number.isFinite(qNum) && t.number === qNum;
+      return nameMatch || phoneMatch || stateMatch || numMatch;
+    });
+    const map = new Map<string, { name: string; phone: string; state: string; tickets: Ticket[] }>();
     for (const t of filtered) {
       const key = `${t.buyer_name}||${t.buyer_phone}`;
-      const entry = map.get(key) ?? { name: t.buyer_name ?? "", phone: t.buyer_phone ?? "", tickets: [] };
+      const entry = map.get(key) ?? { name: t.buyer_name ?? "", phone: t.buyer_phone ?? "", state: t.buyer_state ?? "", tickets: [] };
       entry.tickets.push(t);
       map.set(key, entry);
     }
@@ -75,7 +87,7 @@ function AdminPage() {
       ...g,
       tickets: g.tickets.sort((a, b) => a.number - b.number),
     })).sort((a, b) => b.tickets.length - a.tickets.length);
-  }, [tickets, filter]);
+  }, [tickets, filter, search]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -156,13 +168,22 @@ function AdminPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 text-sm">
+        <div className="flex flex-wrap gap-2 text-sm items-center">
           {(["all", "reserved", "confirmed"] as const).map((f) => (
             <button key={f} onClick={() => setFilter(f)}
               className={`rounded-md border px-3 py-1.5 ${filter === f ? "bg-primary text-primary-foreground border-primary" : "border-border"}`}>
               {f === "all" ? "Todos" : f === "reserved" ? "Por pagar" : "Pagados"}
             </button>
           ))}
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por número, nombre, teléfono o estado…"
+            className="flex-1 min-w-[220px] rounded-md border border-input bg-card px-3 py-1.5 text-sm"
+          />
+          {search && (
+            <button onClick={() => setSearch("")} className="rounded-md border border-border px-3 py-1.5 text-xs">Limpiar</button>
+          )}
         </div>
 
         <div className="space-y-3">
@@ -181,6 +202,7 @@ function AdminPage() {
                       {" · "}
                       <a href={`https://wa.me/${g.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="underline">WhatsApp</a>
                     </p>
+                    {g.state && <p className="text-xs text-muted-foreground mt-0.5">📍 {g.state}</p>}
                     <p className="text-xs text-muted-foreground mt-1">
                       {g.tickets.length} boleto(s) · ${(g.tickets.length * 50).toLocaleString()} MXN
                     </p>
