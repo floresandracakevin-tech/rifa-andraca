@@ -26,6 +26,7 @@ function AdminPage() {
   const [userEmail, setUserEmail] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "reserved" | "confirmed">("all");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     (async () => {
