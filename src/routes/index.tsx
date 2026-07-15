@@ -126,7 +126,7 @@ function RafflePage() {
     setSelected(new Set());
     setMessage({
       type: "ok",
-      text: `¡Listo! Apartamos ${reserved.length} boleto(s). Tienes 20 minutos para enviar tu comprobante de pago o los boletos se liberarán automáticamente.${unavailable.length ? ` No pudimos apartar: ${unavailable.map(padTicket).join(", ")}.` : ""}`,
+      text: `¡Listo! Apartamos ${reserved.length} boleto(s). Tienes 30 minutos para enviar tu comprobante de pago por WhatsApp al 7441632840 o los boletos se liberarán automáticamente.${unavailable.length ? ` No pudimos apartar: ${unavailable.map(padTicket).join(", ")}.` : ""}`,
     });
   };
 
