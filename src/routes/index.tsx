@@ -43,7 +43,7 @@ function RafflePage() {
       // Trigger cleanup of expired reservations
       await supabase.rpc("expire_reservations");
       const { data, error } = await supabase
-        .from("tickets_public")
+        .from("tickets_status")
         .select("number,status")
         .neq("status", "available");
       if (cancelled || error) return;
