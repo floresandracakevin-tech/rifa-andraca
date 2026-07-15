@@ -275,7 +275,7 @@ function RafflePage() {
               <p>Boletos seleccionados: <strong>{selectedList.length}</strong></p>
               <p>Boletos de regalo (3 por cada uno): <strong className="text-primary">+{selectedList.length * 3}</strong></p>
               <p>Total de oportunidades: <strong>{selectedList.length * 4}</strong></p>
-              <p className="text-lg pt-1 border-t border-primary/20 mt-2">A pagar: <strong className="text-primary text-2xl font-display">${(selectedList.length * 50).toLocaleString()} MXN</strong></p>
+              <p className="text-lg pt-1 border-t border-primary/20 mt-2">A pagar: <strong className="text-primary text-2xl font-display">${(Math.ceil(selectedList.length / 4) * 50).toLocaleString()} MXN</strong></p>
             </div>
             <div className="mt-4 rounded-lg border-2 border-destructive bg-destructive/10 p-3 text-sm">
               <strong className="text-destructive">⏱ Importante:</strong> Después de apartar tienes <strong>20 minutos</strong> para enviar tu comprobante de pago. Si no lo envías, tus boletos se liberan automáticamente y no se tomará en cuenta la compra.
