@@ -43,7 +43,7 @@ function RafflePage() {
       // Trigger cleanup of expired reservations
       await supabase.rpc("expire_reservations");
       const { data, error } = await supabase
-        .from("tickets_public")
+        .from("tickets_status")
         .select("number,status")
         .neq("status", "available");
       if (cancelled || error) return;
@@ -126,7 +126,7 @@ function RafflePage() {
     setSelected(new Set());
     setMessage({
       type: "ok",
-      text: `¡Listo! Apartamos ${reserved.length} boleto(s). Tienes 20 minutos para enviar tu comprobante de pago o los boletos se liberarán automáticamente.${unavailable.length ? ` No pudimos apartar: ${unavailable.map(padTicket).join(", ")}.` : ""}`,
+      text: `¡Listo! Apartamos ${reserved.length} boleto(s). Tienes 30 minutos para enviar tu comprobante de pago por WhatsApp al 7441632840 o los boletos se liberarán automáticamente.${unavailable.length ? ` No pudimos apartar: ${unavailable.map(padTicket).join(", ")}.` : ""}`,
     });
   };
 
@@ -200,12 +200,14 @@ function RafflePage() {
             <p className="font-mono text-xl tracking-wider">5428 7808 9628 3157</p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-widest text-secondary">Pasos</p>
-            <ol className="text-sm text-cream/90 list-decimal list-inside space-y-0.5">
-              <li>Selecciona tus boletos</li>
-              <li>Aparta con tu nombre, teléfono y estado</li>
-              <li>Transfiere y envía tu comprobante en 20 min</li>
-            </ol>
+            <p className="text-xs uppercase tracking-widest text-secondary">WhatsApp para comprobantes</p>
+            <a href="https://wa.me/527441632840" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-lg font-semibold hover:text-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.883-9.885 9.883m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+              </svg>
+              744 163 2840
+            </a>
+            <p className="text-xs text-cream/80 mt-1">Envía tu comprobante en 30 min</p>
           </div>
         </div>
       </section>
@@ -273,12 +275,10 @@ function RafflePage() {
             )}
             <div className="mt-4 rounded-lg border-2 border-primary bg-primary/5 p-4 space-y-1 text-sm">
               <p>Boletos seleccionados: <strong>{selectedList.length}</strong></p>
-              <p>Boletos de regalo (3 por cada uno): <strong className="text-primary">+{selectedList.length * 3}</strong></p>
-              <p>Total de oportunidades: <strong>{selectedList.length * 4}</strong></p>
               <p className="text-lg pt-1 border-t border-primary/20 mt-2">A pagar: <strong className="text-primary text-2xl font-display">${(Math.ceil(selectedList.length / 4) * 50).toLocaleString()} MXN</strong></p>
             </div>
             <div className="mt-4 rounded-lg border-2 border-destructive bg-destructive/10 p-3 text-sm">
-              <strong className="text-destructive">⏱ Importante:</strong> Después de apartar tienes <strong>20 minutos</strong> para enviar tu comprobante de pago. Si no lo envías, tus boletos se liberan automáticamente y no se tomará en cuenta la compra.
+              <strong className="text-destructive">⏱ Importante:</strong> Después de apartar tienes <strong>30 minutos</strong> para enviar tu comprobante de pago por WhatsApp al <strong>7441632840</strong>. Si no lo envías, tus boletos se liberan automáticamente y no se tomará en cuenta la compra.
             </div>
           </div>
 
@@ -306,7 +306,7 @@ function RafflePage() {
               <p className={`text-sm ${message.type === "ok" ? "text-primary" : "text-destructive"}`}>{message.text}</p>
             )}
             <p className="text-xs text-muted-foreground">
-              Al apartar, tus boletos quedan bloqueados por 20 minutos. Envía tu comprobante por WhatsApp para confirmar tu participación.
+              Al apartar, tus boletos quedan bloqueados por 30 minutos. Envía tu comprobante por WhatsApp al 7441632840 para confirmar tu participación.
             </p>
           </form>
         </div>
