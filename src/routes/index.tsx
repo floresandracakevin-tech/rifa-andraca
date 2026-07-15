@@ -129,10 +129,9 @@ function RafflePage() {
       text: `¡Listo! Apartamos ${reserved.length} boleto(s). Te redirigimos a WhatsApp con las instrucciones de pago. Tienes 30 minutos para enviar tu comprobante o los boletos se liberarán automáticamente.${unavailable.length ? ` No pudimos apartar: ${unavailable.map(padTicket).join(", ")}.` : ""}`,
     });
 
-    // Redirigir a WhatsApp del usuario con el mensaje de pago
-    const digits = phone.replace(/\D/g, "");
-    const waNumber = digits.length === 10 ? `52${digits}` : digits;
-    const msg = `💳 *Forma de pago — Rifa Andraca*\n\nTransferencia Mercado Pago\n\nCuenta: 5428 7808 9628 3157\n\nA nombre de: *Kevin Flores Andraca*\n\nBoletos apartados: ${reserved.map(padTicket).join(", ")}\nTotal a pagar: $${(Math.ceil(reserved.length / 4) * 50).toLocaleString()} MXN\n\nPor favor transfiere el monto exacto de tu pedido y mándame tu comprobante para confirmar tu apartado. tienes 30 min de lo contrario se liberaran los numeros y no se tomaran en cuenta ¡Gracias! 🙌`;
+    // Redirigir a WhatsApp de Rifa Andraca con el mensaje de pago
+    const waNumber = "527441632840";
+    const msg = `💳 *Forma de pago — Rifa Andraca*\n\nTransferencia Mercado Pago\n\nCuenta: 5428 7808 9628 3157\n\nA nombre de: *Kevin Flores Andraca*\n\nBoletos apartados: ${reserved.map(padTicket).join(", ")}\nTotal a pagar: $${(Math.ceil(reserved.length / 4) * 50).toLocaleString()} MXN\n\nPor favor transfiere el monto exacto de tu pedido y mándame tu comprobante para confirmar tu apartado, tienes 30min. para confirmar tu compra mandandome tu comprobante, de lo contrario no se tomaran en cuenta tus boletos. ¡Gracias! 🙌`;
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
     window.open(url, "_blank");
   };
