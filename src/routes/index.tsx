@@ -306,7 +306,7 @@ function RafflePage() {
               <p className={`text-sm ${message.type === "ok" ? "text-primary" : "text-destructive"}`}>{message.text}</p>
             )}
             <p className="text-xs text-muted-foreground">
-              Al apartar, tus boletos quedan bloqueados por 20 minutos. Envía tu comprobante por WhatsApp para confirmar tu participación.
+              Al apartar, tus boletos quedan bloqueados por 30 minutos. Envía tu comprobante por WhatsApp al 7441632840 para confirmar tu participación.
             </p>
           </form>
         </div>
