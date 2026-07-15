@@ -44,6 +44,29 @@ export type Database = {
         }
         Relationships: []
       }
+      tickets_status: {
+        Row: {
+          number: number
+          status: string
+        }
+        Insert: {
+          number: number
+          status: string
+        }
+        Update: {
+          number?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_status_number_fkey"
+            columns: ["number"]
+            isOneToOne: true
+            referencedRelation: "tickets"
+            referencedColumns: ["number"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -64,21 +87,7 @@ export type Database = {
       }
     }
     Views: {
-      tickets_public: {
-        Row: {
-          number: number | null
-          status: string | null
-        }
-        Insert: {
-          number?: number | null
-          status?: string | null
-        }
-        Update: {
-          number?: number | null
-          status?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       claim_first_admin: { Args: never; Returns: boolean }
