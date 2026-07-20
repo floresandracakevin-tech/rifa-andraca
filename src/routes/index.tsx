@@ -131,7 +131,7 @@ function RafflePage() {
 
     // Redirigir a WhatsApp de Rifa Andraca con el mensaje de pago
     const waNumber = "527441632840";
-    const msg = `💳 *Forma de pago — Rifa Andraca*\n\nTransferencia Mercado Pago\n\nCuenta: 5428 7808 9628 3157\n\nA nombre de: *Kevin Flores Andraca*\n\nBoletos apartados: ${reserved.map(padTicket).join(", ")}\nTotal a pagar: $${(Math.ceil(reserved.length / 4) * 50).toLocaleString()} MXN\n\nPor favor transfiere el monto exacto de tu pedido y mándame tu comprobante para confirmar tu apartado, tienes 30min. para confirmar tu compra mandandome tu comprobante, de lo contrario no se tomaran en cuenta tus boletos. ¡Gracias! 🙌`;
+    const msg = `💳 *Forma de pago — Rifa Andraca*\n\nPuedes pagar por transferencia o depósito en cualquier banco u Oxxo. Elige una opción:\n\n1️⃣ *Mercado Pago*\nCuenta: 5428 7808 9628 3157\nCLABE: 722 969 010 472 785 485\n\n2️⃣ *Banco Azteca*\nCuenta: 4027 6658 8076 1433\n\nA nombre de: *Kevin Flores Andraca*\n\nBoletos apartados: ${reserved.map(padTicket).join(", ")}\nTotal a pagar: $${(Math.ceil(reserved.length / 4) * 50).toLocaleString()} MXN\n\nPor favor transfiere el monto exacto de tu pedido y mándame tu comprobante para confirmar tu apartado. Tienes 30min. para confirmar tu compra; de lo contrario no se tomarán en cuenta tus boletos. ¡Gracias! 🙌`;
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
     window.open(url, "_blank");
   };
