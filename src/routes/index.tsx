@@ -282,9 +282,7 @@ function RafflePage() {
         <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
             <h3 className="text-3xl font-display text-primary">Elige tus boletos</h3>
-            <p className="text-sm text-muted-foreground">
-              Apartados: <strong className="text-foreground">{takenCount.toLocaleString()}</strong> · Disponibles: <strong className="text-foreground">{(TOTAL - takenCount).toLocaleString()}</strong>
-            </p>
+            <p className="text-sm text-muted-foreground">Toca un número para apartarlo.</p>
           </div>
           <form onSubmit={handleJump} className="flex gap-2">
             <input
