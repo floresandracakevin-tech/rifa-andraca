@@ -158,6 +158,18 @@ function RafflePage() {
         </div>
       </header>
 
+      <div className="bg-secondary text-secondary-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm font-semibold">
+          📢 En caso de no venderse el 75% de los boletos, se recorrerá a una fecha a convenir.
+        </div>
+      </div>
+
+      <div className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm">
+          Hola 😁 si vienes de <strong>TikTok</strong>, envía tu comprobante del <strong>combo especial de Chilate Andraca</strong> en agosto del 2026 y participa por este premio. Visita nuestra página de Facebook <strong>Rifas Andraca</strong> y síguenos para estar al pendiente de nuestras rifas 😊
+        </div>
+      </div>
+
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-2 md:items-center">
           <div>
