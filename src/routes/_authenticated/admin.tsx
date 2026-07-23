@@ -153,7 +153,7 @@ function AdminPage() {
       </header>
 
       <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="rounded-xl border-2 border-primary bg-card p-4">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Apartados</p>
             <p className="font-display text-3xl text-primary">{totalReserved}</p>
@@ -161,6 +161,10 @@ function AdminPage() {
           <div className="rounded-xl border-2 border-secondary bg-secondary/20 p-4">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Pagados</p>
             <p className="font-display text-3xl">{totalConfirmed}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card p-4">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">Disponibles</p>
+            <p className="font-display text-3xl">{(60000 - totalReserved - totalConfirmed).toLocaleString()}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Ingresos estimados</p>
