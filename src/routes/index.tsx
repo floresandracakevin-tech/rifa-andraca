@@ -263,6 +263,9 @@ function RafflePage() {
                   <p className="text-xs text-cream/80">A nombre de Kevin Flores Andraca</p>
                 </div>
               </div>
+              <p className="mt-3 rounded-md border border-secondary/60 bg-secondary/15 px-3 py-2 text-xs text-cream">
+                📝 <strong>Importante:</strong> escribe tu <strong>nombre completo</strong> en el comprobante para poder identificar tu pago.
+              </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-widest text-secondary">WhatsApp para comprobantes</p>
