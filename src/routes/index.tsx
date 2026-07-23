@@ -131,7 +131,7 @@ function RafflePage() {
 
     // Redirigir a WhatsApp de Rifa Andraca con el mensaje de pago
     const waNumber = "527441632840";
-    const msg = `💳 *Forma de pago — Rifa Andraca*\n\nPuedes pagar por transferencia o depósito en cualquier banco u Oxxo. Elige una opción:\n\n1️⃣ *Mercado Pago*\nCuenta: 5428 7808 9628 3157\nCLABE: 722 969 010 472 785 485\n\n2️⃣ *Banco Azteca*\nCuenta: 4027 6658 8076 1433\n\nA nombre de: *Kevin Flores Andraca*\n\nBoletos apartados: ${reserved.map(padTicket).join(", ")}\nTotal a pagar: $${(Math.ceil(reserved.length / 4) * 50).toLocaleString()} MXN\n\nPor favor transfiere el monto exacto de tu pedido y mándame tu comprobante para confirmar tu apartado. Tienes 30min. para confirmar tu compra; de lo contrario no se tomarán en cuenta tus boletos. ¡Gracias! 🙌`;
+    const msg = `🎟️ *Nuevo apartado — Rifa Andraca*\n\n👤 Nombre: *${name.trim()}*\n📱 Teléfono: ${phone.trim()}\n📍 Estado: ${estado}\n\n💳 *Forma de pago*\n\nPuedes pagar por transferencia o depósito en cualquier banco u Oxxo. Elige una opción:\n\n1️⃣ *Mercado Pago*\nCuenta: 5428 7808 9628 3157\nCLABE: 722 969 010 472 785 485\n\n2️⃣ *Banco Azteca*\nCuenta: 4027 6658 8076 1433\n\nA nombre de: *Kevin Flores Andraca*\n\n📝 *Importante:* Escribe tu *nombre completo* en el comprobante para poder identificar tu pago.\n\nBoletos apartados: ${reserved.map(padTicket).join(", ")}\nTotal a pagar: $${(Math.ceil(reserved.length / 4) * 50).toLocaleString()} MXN\n\nPor favor transfiere el monto exacto de tu pedido y mándame tu comprobante para confirmar tu apartado. Tienes 30min. para confirmar tu compra; de lo contrario no se tomarán en cuenta tus boletos. ¡Gracias! 🙌`;
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
     window.open(url, "_blank");
   };
@@ -263,6 +263,9 @@ function RafflePage() {
                   <p className="text-xs text-cream/80">A nombre de Kevin Flores Andraca</p>
                 </div>
               </div>
+              <p className="mt-3 rounded-md border border-secondary/60 bg-secondary/15 px-3 py-2 text-xs text-cream">
+                📝 <strong>Importante:</strong> escribe tu <strong>nombre completo</strong> en el comprobante para poder identificar tu pago.
+              </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-widest text-secondary">WhatsApp para comprobantes</p>
@@ -282,9 +285,7 @@ function RafflePage() {
         <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
             <h3 className="text-3xl font-display text-primary">Elige tus boletos</h3>
-            <p className="text-sm text-muted-foreground">
-              Apartados: <strong className="text-foreground">{takenCount.toLocaleString()}</strong> · Disponibles: <strong className="text-foreground">{(TOTAL - takenCount).toLocaleString()}</strong>
-            </p>
+            <p className="text-sm text-muted-foreground">Toca un número para apartarlo.</p>
           </div>
           <form onSubmit={handleJump} className="flex gap-2">
             <input
