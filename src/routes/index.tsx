@@ -158,17 +158,31 @@ function RafflePage() {
         </div>
       </header>
 
-      <div className="bg-secondary text-secondary-foreground">
-        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm font-semibold">
-          📢 En caso de no venderse el 75% de los boletos, se recorrerá a una fecha a convenir.
+      {/* Festive decorative strip inspired by Chilate de Guerrero */}
+      <div className="relative overflow-hidden" style={{ background: "linear-gradient(90deg, #1f8a8f 0%, #f5b400 35%, #e8722c 65%, #7a3b1f 100%)" }}>
+        <svg className="absolute inset-0 h-full w-full opacity-30" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <pattern id="greca" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M0 20 H10 V10 H20 V20 H30 V10 H40" fill="none" stroke="#fff" strokeWidth="2" />
+            </pattern>
+          </defs>
+          <rect width="1200" height="80" fill="url(#greca)" />
+        </svg>
+        <div className="relative mx-auto flex max-w-6xl items-center justify-center gap-3 px-4 py-3">
+          {/* Sun */}
+          <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="#fff2a8"/><g stroke="#fff2a8" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/><line x1="4" y1="4" x2="7" y2="7"/><line x1="17" y1="17" x2="20" y2="20"/><line x1="4" y1="20" x2="7" y2="17"/><line x1="17" y1="7" x2="20" y2="4"/></g></svg>
+          {/* Palm */}
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#7dd67d" aria-hidden="true"><path d="M12 3c-3 0-5 2-5 2s2-0.5 4 0.5c-3 0-5 3-5 3s3-1.5 5-0.5c-3 0.5-4 3-4 3s2-1.5 4-1L11 22h2l-1-11c2 0 4 1 4 1s-1-2-4-3c2-1 5 0.5 5 0.5s-2-3-5-3c2-1 4-0.5 4-0.5s-2-2-4-2z"/></svg>
+          <p className="text-center text-sm font-semibold text-white drop-shadow">
+            Hola 😁 si vienes de <strong>TikTok</strong>, envía tu comprobante del <strong>combo especial de Chilate Andraca</strong> en agosto del 2026 y participa por este premio. Síguenos en Facebook <strong>Rifas Andraca</strong> 😊
+          </p>
+          {/* Hummingbird */}
+          <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 13c3-1 6-2 9-1l4-4 3 1-2 3 3 2-4 1c-1 3-4 5-7 5-3 0-5-2-6-4z" fill="#e91e63"/><circle cx="17" cy="10" r="1" fill="#fff"/><path d="M2 13l-2 2 3 0z" fill="#4dd0e1"/></svg>
+          {/* Marigold */}
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#ff9800" aria-hidden="true"><g><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="4" rx="2.5" ry="4"/><ellipse cx="12" cy="20" rx="2.5" ry="4"/><ellipse cx="4" cy="12" rx="4" ry="2.5"/><ellipse cx="20" cy="12" rx="4" ry="2.5"/><ellipse cx="6" cy="6" rx="2.5" ry="4" transform="rotate(-45 6 6)"/><ellipse cx="18" cy="18" rx="2.5" ry="4" transform="rotate(-45 18 18)"/><ellipse cx="18" cy="6" rx="2.5" ry="4" transform="rotate(45 18 6)"/><ellipse cx="6" cy="18" rx="2.5" ry="4" transform="rotate(45 6 18)"/></g></svg>
         </div>
       </div>
 
-      <div className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-6xl px-4 py-3 text-center text-sm">
-          Hola 😁 si vienes de <strong>TikTok</strong>, envía tu comprobante del <strong>combo especial de Chilate Andraca</strong> en agosto del 2026 y participa por este premio. Visita nuestra página de Facebook <strong>Rifas Andraca</strong> y síguenos para estar al pendiente de nuestras rifas 😊
-        </div>
-      </div>
 
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-2 md:items-center">
