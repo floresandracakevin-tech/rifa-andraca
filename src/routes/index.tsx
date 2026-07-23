@@ -206,8 +206,32 @@ function RafflePage() {
             </div>
           </div>
           <div className="relative">
-            <img src={truck3.url} alt="Chevrolet S10 MAX 2024 blanca en perspectiva" width={1600} height={1008} className="rounded-2xl border-4 border-ink shadow-2xl w-full object-cover" />
+            {/* Sun rays behind image */}
+            <svg className="absolute -top-6 -right-6 h-40 w-40 opacity-70" viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="18" fill="#f5b400"/>
+              <g stroke="#f5b400" strokeWidth="3" strokeLinecap="round">
+                {Array.from({length:12}).map((_,i)=>{const a=(i*30)*Math.PI/180;const x1=50+22*Math.cos(a),y1=50+22*Math.sin(a),x2=50+34*Math.cos(a),y2=50+34*Math.sin(a);return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}/>;})}
+              </g>
+            </svg>
+            {/* Marigold flower */}
+            <svg className="absolute -bottom-4 -left-4 h-20 w-20 opacity-90" viewBox="0 0 24 24" fill="#e8722c" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" fill="#f5b400"/>
+              <ellipse cx="12" cy="4" rx="2.5" ry="4"/><ellipse cx="12" cy="20" rx="2.5" ry="4"/>
+              <ellipse cx="4" cy="12" rx="4" ry="2.5"/><ellipse cx="20" cy="12" rx="4" ry="2.5"/>
+              <ellipse cx="6" cy="6" rx="2.5" ry="4" transform="rotate(-45 6 6)"/>
+              <ellipse cx="18" cy="18" rx="2.5" ry="4" transform="rotate(-45 18 18)"/>
+              <ellipse cx="18" cy="6" rx="2.5" ry="4" transform="rotate(45 18 6)"/>
+              <ellipse cx="6" cy="18" rx="2.5" ry="4" transform="rotate(45 6 18)"/>
+            </svg>
+            {/* Hummingbird */}
+            <svg className="absolute -top-4 -left-4 h-16 w-16" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 13c3-1 6-2 9-1l4-4 3 1-2 3 3 2-4 1c-1 3-4 5-7 5-3 0-5-2-6-4z" fill="#e91e63"/>
+              <circle cx="17" cy="10" r="1" fill="#fff"/>
+              <path d="M2 13l-3 3 4-1z" fill="#1f8a8f"/>
+            </svg>
+            <img src={truck3.url} alt="Chevrolet S10 MAX 2024 blanca en perspectiva" width={1600} height={1008} className="relative rounded-2xl border-4 border-ink shadow-2xl w-full object-cover" />
           </div>
+
         </div>
       </section>
 
