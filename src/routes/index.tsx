@@ -378,6 +378,26 @@ function RafflePage() {
         </div>
       </section>
 
+      {/* Aviso 75% */}
+      <section className="relative overflow-hidden" style={{ background: "linear-gradient(90deg, #7a3b1f 0%, #e8722c 50%, #f5b400 100%)" }}>
+        <svg className="absolute inset-0 h-full w-full opacity-25" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <pattern id="greca2" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M0 20 H10 V10 H20 V20 H30 V10 H40" fill="none" stroke="#fff" strokeWidth="2" />
+            </pattern>
+          </defs>
+          <rect width="1200" height="120" fill="url(#greca2)" />
+        </svg>
+        <div className="relative mx-auto max-w-4xl px-4 py-6 text-center">
+          <p className="text-lg md:text-xl font-display tracking-wider text-white drop-shadow">
+            ⚠ AVISO IMPORTANTE
+          </p>
+          <p className="mt-1 text-sm md:text-base font-semibold text-white/95">
+            En caso de no venderse el 75% de los boletos, se recorrerá a una fecha a convenir.
+          </p>
+        </div>
+      </section>
+
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} Rifa Andraca · Kevin Flores Andraca
       </footer>
